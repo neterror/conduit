@@ -134,8 +134,10 @@ class PostgreSQLPersistentStore extends PersistentStore
 
   @override
   Query<T> newQuery<T extends ManagedObject>(
-      ManagedContext context, ManagedEntity? entity,
-      {T? values}) {
+    ManagedContext context,
+    ManagedEntity entity, {
+    T? values,
+  }) {
     final query = PostgresQuery<T>.withEntity(context, entity);
     if (values != null) {
       query.values = values;

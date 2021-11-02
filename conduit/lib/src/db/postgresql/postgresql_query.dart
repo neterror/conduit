@@ -10,18 +10,15 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
     implements Query<InstanceType> {
   PostgresQuery(this.context);
 
-  PostgresQuery.withEntity(this.context, ManagedEntity? entity) {
-    _entity = entity;
-  }
+  PostgresQuery.withEntity(this.context, this._entity);
 
   @override
   ManagedContext context;
 
   @override
-  ManagedEntity? get entity =>
-      _entity ?? context.dataModel!.entityForType(InstanceType);
+  ManagedEntity get entity => _entity;
 
-  ManagedEntity? _entity;
+  late ManagedEntity _entity = context.dataModel!.entityForType(InstanceType);
 
   @override
   QueryReduceOperation<InstanceType> get reduce {
@@ -43,7 +40,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
 
     buffer.write("VALUES (${builder.sqlValuesToInsert}) ");
 
-    if ((builder.returning?.length ?? 0) > 0) {
+    if (builder.returning.isNotEmpty) {
       buffer.write("RETURNING ${builder.sqlColumnsToReturn}");
     }
 
@@ -93,7 +90,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
     buffer.writeAll(valuesToInsert, ",");
     buffer.write(" ");
 
-    if ((builders.first.returning?.length ?? 0) > 0) {
+    if (builders.first.returning.isNotEmpty) {
       buffer.write("RETURNING ${builders.first.sqlColumnsToReturn}");
     }
 
@@ -120,7 +117,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       throw canModifyAllInstancesError;
     }
 
-    if ((builder.returning?.length ?? 0) > 0) {
+    if (builder.returning.isNotEmpty) {
       buffer.write("RETURNING ${builder.sqlColumnsToReturn}");
     }
 
@@ -140,7 +137,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
     }
 
     throw StateError(
-        "Query error. 'updateOne' modified more than one row in '${entity!.tableName}'. "
+        "Query error. 'updateOne' modified more than one row in '${entity.tableName}'. "
         "This was likely unintended and may be indicativate of a more serious error. Query "
         "should add 'where' constraints on a unique column.");
   }
@@ -177,7 +174,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       return results.first;
     } else if (results.length > 1) {
       throw StateError(
-          "Query error. 'fetchOne' returned more than one row from '${entity!.tableName}'. "
+          "Query error. 'fetchOne' returned more than one row from '${entity.tableName}'. "
           "This was likely unintended and may be indicativate of a more serious error. Query "
           "should add 'where' constraints on a unique column.");
     }

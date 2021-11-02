@@ -152,7 +152,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   void sortBy<T>(T propertyIdentifier(InstanceType x), QuerySortOrder order);
 
   /// The [ManagedEntity] of the [InstanceType].
-  ManagedEntity? get entity;
+  ManagedEntity get entity;
 
   /// The [ManagedContext] this query will be executed on.
   ManagedContext get context;

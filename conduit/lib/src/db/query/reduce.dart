@@ -16,7 +16,7 @@ abstract class QueryReduceOperation<T extends ManagedObject> {
   ///         var averageAge = await query.reduce.average((user) => user.age);
   ///
   /// The property must be an attribute and its type must be an [num], i.e. [int] or [double].
-  Future<double?> average(num? selector(T object));
+  Future<double> average(num? selector(T object));
 
   /// Counts the number of [ManagedObject] instances in the database.
   ///
@@ -28,7 +28,7 @@ abstract class QueryReduceOperation<T extends ManagedObject> {
   ///         var query = Query<User>();
   ///         var totalUsers = await query.reduce.count();
   ///
-  Future<int?> count();
+  Future<int> count();
 
   /// Finds the maximum of some [ManagedObject] property.
   ///
