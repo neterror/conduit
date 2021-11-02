@@ -39,14 +39,14 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
 
   List<KeyPath> get propertiesToFetch =>
       _propertiesToFetch ??
-      entity!.defaultProperties!
-          .map((k) => KeyPath(entity!.properties[k]))
+      entity.defaultProperties!
+          .map((k) => KeyPath(entity.properties[k]))
           .toList();
 
   @override
   InstanceType get values {
     if (_valueObject == null) {
-      _valueObject = entity!.instanceOf() as InstanceType?;
+      _valueObject = entity.instanceOf() as InstanceType?;
       _valueObject!.backing = ManagedBuilderBacking.from(
           _valueObject!.entity, _valueObject!.backing);
     }
@@ -60,14 +60,14 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
       return;
     }
 
-    _valueObject = entity!
+    _valueObject = entity
         .instanceOf(backing: ManagedBuilderBacking.from(entity, obj.backing));
   }
 
   @override
   QueryExpression<T, InstanceType> where<T>(
       T propertyIdentifier(InstanceType x)) {
-    final properties = entity!.identifyProperties(propertyIdentifier)!;
+    final properties = entity.identifyProperties(propertyIdentifier);
     if (properties.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Must reference a single property only.");
@@ -82,7 +82,7 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
   Query<T> join<T extends ManagedObject>(
       {T? object(InstanceType x)?, ManagedSet<T>? set(InstanceType x)?}) {
     var relationship = object ?? set!;
-    final desc = entity!.identifyRelationship(relationship);
+    final desc = entity.identifyRelationship(relationship);
 
     return _createSubquery<T>(desc);
   }
@@ -90,14 +90,14 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
   @override
   void pageBy<T>(T propertyIdentifier(InstanceType x), QuerySortOrder order,
       {T? boundingValue}) {
-    final attribute = entity!.identifyAttribute(propertyIdentifier);
+    final attribute = entity.identifyAttribute(propertyIdentifier);
     pageDescriptor =
         QueryPage(order, attribute.name, boundingValue: boundingValue);
   }
 
   @override
   void sortBy<T>(T propertyIdentifier(InstanceType x), QuerySortOrder order) {
-    final attribute = entity!.identifyAttribute(propertyIdentifier);
+    final attribute = entity.identifyAttribute(propertyIdentifier);
 
     sortDescriptors ??= <QuerySortDescriptor>[];
     sortDescriptors!.add(QuerySortDescriptor(attribute.name, order));
@@ -105,7 +105,7 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
 
   @override
   void returningProperties(List<dynamic> propertyIdentifiers(InstanceType x)) {
-    final properties = entity!.identifyProperties(propertyIdentifiers)!;
+    final properties = entity.identifyProperties(propertyIdentifiers);
 
     if (properties.any((kp) => kp.path.any((p) =>
         p is ManagedRelationshipDescription &&
@@ -114,7 +114,7 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
           "Invalid property selector. Cannot select has-many or has-one relationship properties. Use join instead.");
     }
 
-    _propertiesToFetch = entity!.identifyProperties(propertyIdentifiers);
+    _propertiesToFetch = entity.identifyProperties(propertyIdentifiers);
   }
 
   void validateInput(Validating op) {
@@ -143,16 +143,16 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
     var parent = _parentQuery;
     while (parent != null) {
       if (parent.subQueries!.containsKey(fromRelationship.inverse)) {
-        var validJoins = fromRelationship.entity!.relationships!.values
+        var validJoins = fromRelationship.entity.relationships!.values
             .where((r) => !identical(r, fromRelationship))
             .map((r) => "'${r!.name}'")
             .join(", ");
 
         throw StateError(
-            "Invalid query construction. This query joins '${fromRelationship.entity!.tableName}' "
-            "with '${fromRelationship.inverse!.entity!.tableName}' on property '${fromRelationship.name}'. "
-            "However, '${fromRelationship.inverse!.entity!.tableName}' "
-            "has also joined '${fromRelationship.entity!.tableName}' on this property's inverse "
+            "Invalid query construction. This query joins '${fromRelationship.entity.tableName}' "
+            "with '${fromRelationship.inverse!.entity.tableName}' on property '${fromRelationship.name}'. "
+            "However, '${fromRelationship.inverse!.entity.tableName}' "
+            "has also joined '${fromRelationship.entity.tableName}' on this property's inverse "
             "'${fromRelationship.inverse!.name}' earlier in the 'Query'. "
             "Perhaps you meant to join on another property, such as: $validJoins?");
       }

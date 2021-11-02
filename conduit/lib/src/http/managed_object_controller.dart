@@ -93,9 +93,9 @@ class ManagedObjectController<InstanceType extends ManagedObject>
 
   @Operation.get("id")
   Future<Response> getObject(@Bind.path("id") String id) async {
-    var primaryKey = _query!.entity!.primaryKey;
+    var primaryKey = _query!.entity.primaryKey;
     final parsedIdentifier =
-        _getIdentifierFromPath(id, _query!.entity!.properties[primaryKey]);
+        _getIdentifierFromPath(id, _query!.entity.properties[primaryKey]);
     _query!.where((o) => o[primaryKey]).equalTo(parsedIdentifier);
 
     _query = await willFindObjectWithQuery(_query);
@@ -128,7 +128,7 @@ class ManagedObjectController<InstanceType extends ManagedObject>
 
   @Operation.post()
   Future<Response> createObject() async {
-    final instance = _query!.entity!.instanceOf() as InstanceType;
+    final instance = _query!.entity.instanceOf() as InstanceType;
     instance.readFromMap(request!.body.as());
     _query!.values = instance;
 
@@ -164,9 +164,9 @@ class ManagedObjectController<InstanceType extends ManagedObject>
 
   @Operation.delete("id")
   Future<Response> deleteObject(@Bind.path("id") String id) async {
-    var primaryKey = _query!.entity!.primaryKey;
+    var primaryKey = _query!.entity.primaryKey;
     final parsedIdentifier =
-        _getIdentifierFromPath(id, _query!.entity!.properties[primaryKey]);
+        _getIdentifierFromPath(id, _query!.entity.properties[primaryKey]);
     _query!.where((o) => o[primaryKey]).equalTo(parsedIdentifier);
 
     _query = await willDeleteObjectWithQuery(_query);
@@ -206,12 +206,12 @@ class ManagedObjectController<InstanceType extends ManagedObject>
 
   @Operation.put("id")
   Future<Response> updateObject(@Bind.path("id") String id) async {
-    var primaryKey = _query!.entity!.primaryKey;
+    var primaryKey = _query!.entity.primaryKey;
     final parsedIdentifier =
-        _getIdentifierFromPath(id, _query!.entity!.properties[primaryKey]);
+        _getIdentifierFromPath(id, _query!.entity.properties[primaryKey]);
     _query!.where((o) => o[primaryKey]).equalTo(parsedIdentifier);
 
-    final instance = _query!.entity!.instanceOf() as InstanceType;
+    final instance = _query!.entity.instanceOf() as InstanceType;
     instance.readFromMap(request!.body.as());
     _query!.values = instance;
 
@@ -302,7 +302,7 @@ class ManagedObjectController<InstanceType extends ManagedObject>
         });
       }
 
-      var pageByProperty = _query!.entity!.properties[pageBy];
+      var pageByProperty = _query!.entity.properties[pageBy];
       if (pageByProperty == null) {
         throw Response.badRequest(body: {"error": "cannot page by '$pageBy'"});
       }
@@ -321,7 +321,7 @@ class ManagedObjectController<InstanceType extends ManagedObject>
                 "invalid 'sortyBy' format. syntax: 'name,asc' or 'name,desc'."
           });
         }
-        if (_query!.entity!.properties[split.first] == null) {
+        if (_query!.entity.properties[split.first] == null) {
           throw Response.badRequest(
               body: {"error": "cannot sort by '$sortBy'"});
         }
@@ -414,7 +414,7 @@ class ManagedObjectController<InstanceType extends ManagedObject>
       APIDocumentContext context, String route, APIPath path) {
     final ops = super.documentOperations(context, route, path);
 
-    final entityName = _query!.entity!.name;
+    final entityName = _query!.entity.name;
 
     if (path.parameters
         .where((p) => p!.location == APIParameterLocation.path)

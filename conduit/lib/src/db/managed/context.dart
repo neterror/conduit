@@ -115,7 +115,7 @@ class ManagedContext implements APIComponentDocumenter {
   /// Returns an entity for a type from [dataModel].
   ///
   /// See [ManagedDataModel.entityForType].
-  ManagedEntity? entityForType(Type type) {
+  ManagedEntity entityForType(Type type) {
     return dataModel!.entityForType(type);
   }
 

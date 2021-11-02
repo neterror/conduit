@@ -118,7 +118,7 @@ class EntityBuilder {
     properties.forEach((p) => p.validate(entityBuilders));
   }
 
-  void link(List<ManagedEntity?> entities) {
+  void link(List<ManagedEntity> entities) {
     entity.symbolMap = {};
     properties.forEach((p) {
       p.link(entities);

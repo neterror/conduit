@@ -45,7 +45,7 @@ class ValidatorBuilder {
     }
   }
 
-  void link(List<ManagedEntity?> others) {
+  void link(List<ManagedEntity> others) {
     _validator = ManagedValidator(metadata, _state);
   }
 }

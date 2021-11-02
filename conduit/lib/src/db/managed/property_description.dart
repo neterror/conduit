@@ -33,7 +33,7 @@ abstract class ManagedPropertyDescription {
   }
 
   /// A reference to the [ManagedEntity] that contains this property.
-  final ManagedEntity? entity;
+  final ManagedEntity entity;
 
   /// The value type of this property.
   ///
@@ -363,7 +363,7 @@ class ManagedAttributeDescription extends ManagedPropertyDescription {
     } else if (type!.kind == ManagedPropertyType.list ||
         type!.kind == ManagedPropertyType.map) {
       try {
-        return entity!.runtime!.dynamicConvertFromPrimitiveValue(this, value);
+        return entity.runtime!.dynamicConvertFromPrimitiveValue(this, value);
       } on TypeCoercionException {
         throw ValidationException(["invalid input value for '$name'"]);
       }
@@ -420,7 +420,7 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
   }
 
   /// The entity that this relationship's instances are represented by.
-  final ManagedEntity? destinationEntity;
+  final ManagedEntity destinationEntity;
 
   /// The delete rule for this relationship.
   final DeleteRule? deleteRule;
@@ -433,7 +433,7 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
 
   /// The [ManagedRelationshipDescription] on [destinationEntity] that represents the inverse of this relationship.
   ManagedRelationshipDescription? get inverse =>
-      destinationEntity!.relationships![inverseKey];
+      destinationEntity.relationships![inverseKey];
 
   /// Whether or not this relationship is on the belonging side.
   bool get isBelongsTo => relationshipType == ManagedRelationshipType.belongsTo;
@@ -442,9 +442,9 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
   @override
   bool isAssignableWith(dynamic dartValue) {
     if (relationshipType == ManagedRelationshipType.hasMany) {
-      return destinationEntity!.runtime!.isValueListOf(dartValue);
+      return destinationEntity.runtime!.isValueListOf(dartValue);
     }
-    return destinationEntity!.runtime!.isValueInstanceOf(dartValue);
+    return destinationEntity.runtime!.isValueInstanceOf(dartValue);
   }
 
   @override
@@ -457,9 +457,9 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
       // If we're only fetching the foreign key, don't do a full asMap
       if (relationshipType == ManagedRelationshipType.belongsTo &&
           value.backing.contents!.length == 1 &&
-          value.backing.contents!.containsKey(destinationEntity!.primaryKey)) {
+          value.backing.contents!.containsKey(destinationEntity.primaryKey)) {
         return {
-          destinationEntity!.primaryKey: value[destinationEntity!.primaryKey]
+          destinationEntity.primaryKey: value[destinationEntity.primaryKey]
         };
       }
 
@@ -484,7 +484,7 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
         throw ValidationException(["invalid input type for '$name'"]);
       }
 
-      final instance = destinationEntity!.instanceOf()..readFromMap(value);
+      final instance = destinationEntity.instanceOf()..readFromMap(value);
 
       return instance;
     }
@@ -499,16 +499,16 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
       if (m is! Map<String, dynamic>) {
         throw ValidationException(["invalid input type for '$name'"]);
       }
-      final instance = destinationEntity!.instanceOf()..readFromMap(m);
+      final instance = destinationEntity.instanceOf()..readFromMap(m);
       return instance;
     };
-    return destinationEntity!.setOf(value.map(instantiator));
+    return destinationEntity.setOf(value.map(instantiator));
   }
 
   @override
   APISchemaObject documentSchemaObject(APIDocumentContext context) {
     final relatedType =
-        context.schema.getObjectWithType(inverse!.entity!.instanceType);
+        context.schema.getObjectWithType(inverse!.entity.instanceType);
 
     if (relationshipType == ManagedRelationshipType.hasMany) {
       return APISchemaObject.array(ofSchema: relatedType)
@@ -520,7 +520,7 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
         ..isNullable = true;
     }
 
-    final destPk = destinationEntity!.primaryKeyAttribute!;
+    final destPk = destinationEntity.primaryKeyAttribute!;
     return APISchemaObject.object({
       destPk.name: ManagedPropertyDescription._typedSchemaObject(destPk.type!)
     })
@@ -544,6 +544,6 @@ class ManagedRelationshipDescription extends ManagedPropertyDescription {
       //   relTypeString = 'Not set';
       //   break;
     }
-    return "- $name -> '${destinationEntity!.name}' | Type: $relTypeString | Inverse: ${inverseKey}";
+    return "- $name -> '${destinationEntity.name}' | Type: $relTypeString | Inverse: ${inverseKey}";
   }
 }

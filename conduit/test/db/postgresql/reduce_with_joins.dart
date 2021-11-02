@@ -26,7 +26,7 @@ void main() {
     group("valid", () {
       test("join using 'belongs to' in one to many relation.", () async {
         final q = Query<Employee>(ctx)
-          ..where((e) => e.worksIn.budget).greaterThan(200001);
+          ..where((e) => e.worksIn!.budget).greaterThan(200001);
         final sum = await q.reduce.sum((e) => e.salary);
         expect(sum, 5500);
         final count = await q.reduce.count();
@@ -35,7 +35,7 @@ void main() {
 
       test("join using 'has one' relation.", () async {
         final q = Query<Employee>(ctx)
-          ..where((e) => e.personalRecord.payedLeaveLeft).greaterThan(10);
+          ..where((e) => e.personalRecord!.payedLeaveLeft).greaterThan(10);
         final sum = await q.reduce.sum((e) => e.salary);
         expect(sum, 2000);
         final count = await q.reduce.count();
@@ -44,7 +44,7 @@ void main() {
 
       test("join using 'belongs to' in one to one relation.", () async {
         final q = Query<Record>(ctx)
-          ..where((r) => r.employee.salary).lessThan(101);
+          ..where((r) => r.employee!.salary).lessThan(101);
         final count = await q.reduce.count();
         expect(count, 2);
         final avg = await q.reduce.average((r) => r.payedLeaveLeft);
@@ -53,7 +53,7 @@ void main() {
 
       test("join chinning relation.", () async {
         final q = Query<Record>(ctx)
-          ..where((r) => r.employee.worksIn.budget).greaterThan(200001);
+          ..where((r) => r.employee!.worksIn!.budget).greaterThan(200001);
         final count = await q.reduce.count();
         expect(count, 10);
         final avg = await q.reduce.average((r) => r.payedLeaveLeft);
@@ -167,48 +167,48 @@ class Company extends ManagedObject<_Company> implements _Company {}
 
 class _Company {
   @primaryKey
-  late int id;
+  int? id;
 
-  late int budget;
+  int? budget;
 
-  late ManagedSet<Employee> employs;
-  late ManagedSet<Report> quarterlyReports;
+  ManagedSet<Employee>? employs;
+  ManagedSet<Report>? quarterlyReports;
 }
 
 class Employee extends ManagedObject<_Employee> implements _Employee {}
 
 class _Employee {
   @primaryKey
-  late int id;
+  int? id;
 
-  late int salary;
+  int? salary;
 
   @Relate(#employs)
-  late Company worksIn;
+  Company? worksIn;
 
-  late Record personalRecord;
+  Record? personalRecord;
 }
 
 class Record extends ManagedObject<_Record> implements _Record {}
 
 class _Record {
   @primaryKey
-  late int id;
+  int? id;
 
-  late int payedLeaveLeft;
+  int? payedLeaveLeft;
 
   @Relate(#personalRecord)
-  late Employee employee;
+  Employee? employee;
 }
 
 class Report extends ManagedObject<_Report> implements _Report {}
 
 class _Report {
   @primaryKey
-  late int id;
+  int? id;
 
-  late int ernings;
+  int? ernings;
 
   @Relate(#quarterlyReports)
-  late Company company;
+  Company? company;
 }

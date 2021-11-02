@@ -234,10 +234,10 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
   }
 
   void validatePageDescriptor() {
-    var prop = entity!.attributes[pageDescriptor!.propertyName];
+    var prop = entity.attributes[pageDescriptor!.propertyName];
     if (prop == null) {
       throw StateError(
-          "Invalid query page descriptor. Column '${pageDescriptor!.propertyName}' does not exist for table '${entity!.tableName}'");
+          "Invalid query page descriptor. Column '${pageDescriptor!.propertyName}' does not exist for table '${entity.tableName}'");
     }
 
     if (pageDescriptor!.boundingValue != null &&

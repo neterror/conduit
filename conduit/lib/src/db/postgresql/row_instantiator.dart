@@ -62,9 +62,9 @@ class RowInstantiator {
 
   ManagedObject createInstanceWithPrimaryKeyValue(
       TableBuilder table, dynamic primaryKeyValue) {
-    var instance = table.entity!.instanceOf();
+    var instance = table.entity.instanceOf();
 
-    instance[table.entity!.primaryKey] = primaryKeyValue;
+    instance[table.entity.primaryKey] = primaryKeyValue;
 
     var typeMap = distinctObjects[table];
     if (typeMap == null) {
@@ -94,12 +94,12 @@ class RowInstantiator {
     }
 
     var innerInstanceWrapper =
-        instanceFromRow(rowIterator, table.returning!.iterator, table: table);
+        instanceFromRow(rowIterator, table.returning.iterator, table: table);
 
     if (table.joinedBy!.relationshipType == ManagedRelationshipType.hasMany) {
       // If to many, put in a managed set.
       final list = (instance[table.joinedBy!.name] ??
-          table.joinedBy!.destinationEntity!.setOf([])) as ManagedSet?;
+          table.joinedBy!.destinationEntity.setOf([])) as ManagedSet?;
 
       if (innerInstanceWrapper?.isNew ?? false) {
         list!.add(innerInstanceWrapper!.instance);
@@ -126,8 +126,8 @@ class RowInstantiator {
     if (desc is ManagedRelationshipDescription) {
       // This is a belongsTo relationship (otherwise it wouldn't be a column), keep the foreign key.
       if (value != null) {
-        var innerInstance = desc.destinationEntity!.instanceOf();
-        innerInstance[desc.destinationEntity!.primaryKey] = value;
+        var innerInstance = desc.destinationEntity.instanceOf();
+        innerInstance[desc.destinationEntity.primaryKey] = value;
         instance[desc.name] = innerInstance;
       } else {
         // If null, explicitly add null to map so the value is populated.
@@ -143,7 +143,7 @@ class RowInstantiator {
     while (returningIterator.moveNext()) {
       var ret = returningIterator.current;
       if (ret is TableBuilder) {
-        var _ = instanceFromRow(rowIterator, ret.returning!.iterator);
+        var _ = instanceFromRow(rowIterator, ret.returning.iterator);
       } else {
         rowIterator.moveNext();
       }

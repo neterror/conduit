@@ -14,7 +14,7 @@ void main() {
       objects = await populate(ctx);
 
       /* Note that objects are sorted by id, and therefore all values are in sorted order */
-      objects.sort((t1, t2) => t1.id.compareTo(t2.id));
+      objects.sort((t1, t2) => t1.id!.compareTo(t2.id!));
     });
 
     tearDownAll(() async {
@@ -28,7 +28,7 @@ void main() {
         objects = await populate(ctx);
 
         /* Note that objects are sorted by id, and therefore all values are in sorted order */
-        objects.sort((t1, t2) => t1.id.compareTo(t2.id));
+        objects.sort((t1, t2) => t1.id!.compareTo(t2.id!));
       });
       test("Reduce functions work correctly in a tansaction", () async {
         int? result;
@@ -52,19 +52,19 @@ void main() {
       test("produces average for int type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.average((t) => t.i);
-        expect(result, objects.fold<int>(0, (p, n) => p + n.i) / objects.length);
+        expect(result, objects.fold<int>(0, (p, n) => p + n.i!) / objects.length);
       });
 
       test("produces average for double type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.average((t) => t.d);
-        expect(result, objects.fold<double>(0, (p, n) => p + n.d) / objects.length);
+        expect(result, objects.fold<double>(0, (p, n) => p + n.d!) / objects.length);
       });
 
       test("with predicate", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(5);
         var result = await q.reduce.average((t) => t.i);
-        expect(result, objects.sublist(0, 5).fold<int>(0, (p, n) => p + n.i) / 5);
+        expect(result, objects.sublist(0, 5).fold<int>(0, (p, n) => p + n.i!) / 5);
       });
     });
 
@@ -150,19 +150,19 @@ void main() {
       test("produces sum for int type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.sum((t) => t.i);
-        expect(result, objects.fold<int>(0, (p, n) => p + n.i));
+        expect(result, objects.fold<int>(0, (p, n) => p + n.i!));
       });
 
       test("produces sum for double type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.sum((t) => t.d);
-        expect(result, objects.fold<double>(0, (p, n) => p + n.d));
+        expect(result, objects.fold<double>(0, (p, n) => p + n.d!));
       });
 
       test("with predicate", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(5);
         var result = await q.reduce.sum((t) => t.i);
-        expect(result, objects.sublist(0, 5).fold<int>(0, (p, a) => p + a.i));
+        expect(result, objects.sublist(0, 5).fold<int>(0, (p, a) => p + a.i!));
       });
     });
   });
@@ -177,7 +177,7 @@ void main() {
       objects = await populate(ctx, overflow: true);
 
       /* Note that objects are sorted by id, and therefore all values are in sorted order */
-      objects.sort((t1, t2) => t1.id.compareTo(t2.id));
+      objects.sort((t1, t2) => t1.id!.compareTo(t2.id!));
     });
 
     tearDownAll(() async {
@@ -187,13 +187,13 @@ void main() {
     test("Sum with large integer numbers", () async {
       var q = Query<Test>(ctx);
       var result = await q.reduce.sum((t) => t.i);
-      expect(result, objects.fold<int>(0, (p, n) => p + n.i));
+      expect(result, objects.fold<int>(0, (p, n) => p + n.i!));
     });
 
     test("Sum with fractional", () async {
       var q = Query<Test>(ctx);
       var result = await q.reduce.sum((t) => t.d);
-      expect(result, objects.fold<double>(0, (p, n) => p + n.d));
+      expect(result, objects.fold<double>(0, (p, n) => p + n.d!));
     });
   });
 }
@@ -202,12 +202,12 @@ class Test extends ManagedObject<_Test> implements _Test {}
 
 class _Test {
   @primaryKey
-  late int id;
+  int? id;
 
-  late String s;
-  late DateTime dt;
-  late double d;
-  late int i;
+  String? s;
+  DateTime? dt;
+  double? d;
+  int? i;
 }
 
 Future<List<Test>> populate(ManagedContext ctx, {bool overflow = false}) async {

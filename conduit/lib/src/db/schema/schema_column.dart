@@ -34,8 +34,8 @@ class SchemaColumn {
 
     if (desc is ManagedRelationshipDescription) {
       isPrimaryKey = false;
-      relatedTableName = desc.destinationEntity!.tableName;
-      relatedColumnName = desc.destinationEntity!.primaryKey;
+      relatedTableName = desc.destinationEntity.tableName;
+      relatedColumnName = desc.destinationEntity.primaryKey;
       if (desc.deleteRule != null) {
         _deleteRule = deleteRuleStringForDeleteRule(desc.deleteRule!);
       }

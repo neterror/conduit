@@ -184,7 +184,7 @@ class ManagedEntity implements APIComponentDocumenter {
   /// on this entity was selected. Returns that attribute.
   ManagedAttributeDescription identifyAttribute<T, U extends ManagedObject>(
       T propertyIdentifier(U x)) {
-    final keyPaths = identifyProperties(propertyIdentifier)!;
+    final keyPaths = identifyProperties(propertyIdentifier);
     if (keyPaths.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Cannot access more than one property for this operation.");
@@ -227,7 +227,7 @@ class ManagedEntity implements APIComponentDocumenter {
   ManagedRelationshipDescription
       identifyRelationship<T, U extends ManagedObject>(
           T propertyIdentifier(U x)) {
-    final keyPaths = identifyProperties(propertyIdentifier)!;
+    final keyPaths = identifyProperties(propertyIdentifier);
     if (keyPaths.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Cannot access more than one property for this operation.");
@@ -261,7 +261,7 @@ class ManagedEntity implements APIComponentDocumenter {
   /// on this entity was selected. Returns that property.
   KeyPath identifyProperty<T, U extends ManagedObject>(
       T propertyIdentifier(U? x)) {
-    final properties = identifyProperties(propertyIdentifier)!;
+    final properties = identifyProperties(propertyIdentifier);
     if (properties.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Must reference a single property only.");
@@ -274,7 +274,7 @@ class ManagedEntity implements APIComponentDocumenter {
   ///
   /// Each selected property in [propertiesIdentifier] is returned in a [KeyPath] object that fully identifies the
   /// property relative to this entity.
-  List<KeyPath>? identifyProperties<T, U extends ManagedObject>(
+  List<KeyPath> identifyProperties<T, U extends ManagedObject>(
       T propertiesIdentifier(U x)) {
     final tracker = ManagedAccessTrackingBacking();
     var obj = instanceOf<U>(backing: tracker);

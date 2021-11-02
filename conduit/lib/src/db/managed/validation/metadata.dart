@@ -36,9 +36,9 @@ class ValidationContext {
     final p = property;
     if (p is ManagedRelationshipDescription) {
       errors.add(
-          "${p.entity!.name}.${p.name}.${p.destinationEntity!.primaryKey}: $reason");
+          "${p.entity.name}.${p.name}.${p.destinationEntity.primaryKey}: $reason");
     } else {
-      errors.add("${p!.entity!.name}.${p.name}: $reason");
+      errors.add("${p!.entity.name}.${p.name}: $reason");
     }
   }
 

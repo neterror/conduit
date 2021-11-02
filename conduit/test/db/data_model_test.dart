@@ -205,7 +205,7 @@ void main() {
           dm
               .entityForType(CyclicLeft)
               .relationships!["leftRef"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "CyclicRight");
       expect(
@@ -218,7 +218,7 @@ void main() {
           dm
               .entityForType(CyclicLeft)
               .relationships!["from"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "CyclicRight");
       expect(dm.entityForType(CyclicLeft).relationships!["from"]!.inverse!.name,
@@ -230,7 +230,7 @@ void main() {
           dm
               .entityForType(CyclicRight)
               .relationships!["rightRef"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "CyclicLeft");
       expect(
@@ -247,7 +247,7 @@ void main() {
           dm
               .entityForType(CyclicRight)
               .relationships!["from"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "CyclicLeft");
       expect(
@@ -263,7 +263,7 @@ void main() {
           dm
               .entityForType(SelfReferential)
               .relationships!["parent"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "SelfReferential");
       expect(
@@ -283,7 +283,7 @@ void main() {
           dm
               .entityForType(SelfReferential)
               .relationships!["child"]!
-              .destinationEntity!
+              .destinationEntity
               .name,
           "SelfReferential");
       expect(
@@ -314,14 +314,14 @@ void main() {
           .entityForType(DoubleRelationshipForeignKeyModel)
           .relationships!["isManyOf"]!;
       expect(isManyOf.inverse!.name, "hasManyOf");
-      expect(isManyOf.destinationEntity!.tableName,
+      expect(isManyOf.destinationEntity.tableName,
           model.entityForType(DoubleRelationshipHasModel).tableName);
 
       var isOneOf = model
           .entityForType(DoubleRelationshipForeignKeyModel)
           .relationships!["isOneOf"]!;
       expect(isOneOf.inverse!.name, "hasOneOf");
-      expect(isOneOf.destinationEntity!.tableName,
+      expect(isOneOf.destinationEntity.tableName,
           model.entityForType(DoubleRelationshipHasModel).tableName);
     });
 
@@ -337,7 +337,7 @@ void main() {
       var partial = model
           .entityForType(DoubleRelationshipForeignKeyModel)
           .relationships!["partial"]!;
-      expect(partial.destinationEntity!.tableName,
+      expect(partial.destinationEntity.tableName,
           model.entityForType(SomeOtherRelationshipModel).tableName);
     });
   });
@@ -358,7 +358,7 @@ void main() {
       expect(totalEntity.attributes["id"]!.isPrimaryKey, true);
       expect(totalEntity.attributes["field"]!.isIndexed, true);
       expect(
-          totalEntity.relationships!["hasManyRelationship"]!.destinationEntity!
+          totalEntity.relationships!["hasManyRelationship"]!.destinationEntity
               .tableName,
           referenceEntity.tableName);
       expect(
@@ -367,7 +367,7 @@ void main() {
 
       expect(
           referenceEntity
-              .relationships!["foreignKeyColumn"]!.destinationEntity!.tableName,
+              .relationships!["foreignKeyColumn"]!.destinationEntity.tableName,
           totalEntity.tableName);
     });
 
@@ -436,11 +436,11 @@ void main() {
 
     var joinEntity = model.entityForType(JoinMany);
     expect(
-        joinEntity.relationships!["left"]!.destinationEntity!.instanceType ==
+        joinEntity.relationships!["left"]!.destinationEntity.instanceType ==
             LeftMany,
         true);
     expect(
-        joinEntity.relationships!["right"]!.destinationEntity!.instanceType ==
+        joinEntity.relationships!["right"]!.destinationEntity.instanceType ==
             RightMany,
         true);
   });

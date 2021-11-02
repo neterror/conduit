@@ -161,7 +161,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
     // We also have all of the instances created by these annotations available in some
     // way or another in the [property].
     final fieldAnnotations = context.getAnnotationsFromField(
-        EntityBuilder.getTableDefinitionForType(property.entity!.instanceType)
+        EntityBuilder.getTableDefinitionForType(property.entity.instanceType)
             .reflectedType,
         property.name);
 
@@ -183,7 +183,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
     }
 
     final inverseType = property is ManagedRelationshipDescription
-        ? "${property.destinationEntity!.instanceType}"
+        ? "${property.destinationEntity.instanceType}"
         : "null";
 
     return """() {
@@ -243,7 +243,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
     final value = attribute.defaultValue;
     return sourcifyValue(value,
         onError:
-            "The default value for '${attribute.entity!.instanceType}.${attribute.name}' "
+            "The default value for '${attribute.entity.instanceType}.${attribute.name}' "
             "contains both double and single quotes");
   }
 
@@ -280,7 +280,7 @@ ManagedRelationshipDescription.make<${relationship.declaredType}>(
   entity,
   '${relationship.name}',
   ${_getManagedTypeInstantiator(relationship.type)},
-  dataModel.entities.firstWhere((e) => e.name == '${relationship.destinationEntity!.name}'),
+  dataModel.entities.firstWhere((e) => e.name == '${relationship.destinationEntity.name}'),
   ${relationship.deleteRule},
   ${relationship.relationshipType},
   '${relationship.inverseKey}',

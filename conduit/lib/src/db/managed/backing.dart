@@ -67,14 +67,14 @@ class ManagedForeignKeyBuilderBacking extends ManagedBacking {
 
 class ManagedBuilderBacking extends ManagedBacking {
   ManagedBuilderBacking();
-  ManagedBuilderBacking.from(ManagedEntity? entity, ManagedBacking original) {
+  ManagedBuilderBacking.from(ManagedEntity entity, ManagedBacking original) {
     if (original is! ManagedValueBacking) {
       throw ArgumentError(
           "Invalid 'ManagedObject' assignment to 'Query.values'. Object must be created through default constructor.");
     }
 
     original.contents.forEach((key, value) {
-      final prop = entity!.properties[key];
+      final prop = entity.properties[key];
       if (prop == null) {
         throw ArgumentError(
             "Invalid 'ManagedObject' assignment to 'Query.values'. Property '$key' does not exist for '${entity.name}'.");
@@ -101,7 +101,7 @@ class ManagedBuilderBacking extends ManagedBacking {
       }
 
       if (!contents.containsKey(property.name)) {
-        contents[property.name] = property.inverse!.entity!
+        contents[property.name] = property.inverse!.entity
             .instanceOf(backing: ManagedForeignKeyBuilderBacking());
       }
     }
@@ -133,7 +133,7 @@ class ManagedBuilderBacking extends ManagedBacking {
 }
 
 class ManagedAccessTrackingBacking extends ManagedBacking {
-  List<KeyPath>? keyPaths;
+  List<KeyPath> keyPaths = [];
   KeyPath? workingKeyPath;
 
   @override
@@ -147,9 +147,8 @@ class ManagedAccessTrackingBacking extends ManagedBacking {
       return forward(property, workingKeyPath);
     }
 
-    keyPaths ??= [];
     final keyPath = KeyPath(property);
-    keyPaths!.add(keyPath);
+    keyPaths.add(keyPath);
 
     return forward(property, keyPath);
   }
@@ -163,9 +162,9 @@ class ManagedAccessTrackingBacking extends ManagedBacking {
     if (property is ManagedRelationshipDescription) {
       final tracker = ManagedAccessTrackingBacking()..workingKeyPath = keyPath;
       if (property.relationshipType == ManagedRelationshipType.hasMany) {
-        return property.inverse!.entity!.setOf([]);
+        return property.inverse!.entity.setOf([]);
       } else {
-        return property.destinationEntity!.instanceOf(backing: tracker);
+        return property.destinationEntity.instanceOf(backing: tracker);
       }
     } else if (property is ManagedAttributeDescription &&
         property.type!.kind == ManagedPropertyType.document) {

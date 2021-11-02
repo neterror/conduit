@@ -26,15 +26,15 @@ class ColumnBuilder extends Returnable {
     }
 
     if (primaryKeyIndex == null) {
-      keys.insert(0, KeyPath(entity!.primaryKeyAttribute));
+      keys.insert(0, KeyPath(entity.primaryKeyAttribute));
     } else if (primaryKeyIndex > 0) {
       keys.removeAt(primaryKeyIndex);
-      keys.insert(0, KeyPath(entity!.primaryKeyAttribute));
+      keys.insert(0, KeyPath(entity.primaryKeyAttribute));
     }
 
     return List.from(keys.map((key) {
       return ColumnBuilder(
-          table, propertyForName(entity!, key.path.first!.name),
+          table, propertyForName(entity, key.path.first!.name),
           documentKeyPath: key.dynamicElements);
     }));
   }
@@ -143,7 +143,7 @@ class ColumnBuilder extends Returnable {
 
     if (property is ManagedRelationshipDescription) {
       var relatedPrimaryKey = (property as ManagedRelationshipDescription)
-          .destinationEntity!
+          .destinationEntity
           .primaryKey;
       name = "${name}_$relatedPrimaryKey";
     } else if (documentKeyPath != null) {

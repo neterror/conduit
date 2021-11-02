@@ -31,7 +31,7 @@ class TableBuilder implements Returnable {
           query.pageDescriptor!.propertyName, query.pageDescriptor!.order));
 
       if (query.pageDescriptor!.boundingValue != null) {
-        final prop = entity!.properties[query.pageDescriptor!.propertyName];
+        final prop = entity.properties[query.pageDescriptor!.propertyName];
         final operator = query.pageDescriptor!.order == QuerySortOrder.ascending
             ? PredicateOperator.greaterThan
             : PredicateOperator.lessThan;
@@ -61,7 +61,7 @@ class TableBuilder implements Returnable {
     columnSortBuilders = [];
   }
 
-  final ManagedEntity? entity;
+  final ManagedEntity entity;
   final TableBuilder? parent;
   final ManagedRelationshipDescription? joinedBy;
   final List<ColumnExpressionBuilder> expressionBuilders = [];
@@ -109,9 +109,9 @@ class TableBuilder implements Returnable {
     ColumnBuilder left, right;
     if (identical(foreignKeyProperty, joinedBy)) {
       left = ColumnBuilder(parent, joinedBy);
-      right = ColumnBuilder(this, entity!.primaryKeyAttribute);
+      right = ColumnBuilder(this, entity.primaryKeyAttribute);
     } else {
-      left = ColumnBuilder(parent, parent!.entity!.primaryKeyAttribute);
+      left = ColumnBuilder(parent, parent!.entity.primaryKeyAttribute);
       right = ColumnBuilder(this, joinedBy!.inverse);
     }
 
@@ -189,7 +189,7 @@ class TableBuilder implements Returnable {
     final lastElement = expression.keyPath.path.last;
     if (lastElement is ManagedRelationshipDescription) {
       final inversePrimaryKey =
-          lastElement.inverse!.entity!.primaryKeyAttribute;
+          lastElement.inverse!.entity.primaryKeyAttribute;
       final expr = ColumnExpressionBuilder(
           joinedTable, inversePrimaryKey, expression.expression,
           prefix: tableAlias);
@@ -249,13 +249,13 @@ class TableBuilder implements Returnable {
 
   String? get sqlTableName {
     if (tableAlias == null) {
-      return entity!.tableName;
+      return entity.tableName;
     }
 
-    return "${entity!.tableName} $tableAlias";
+    return "${entity.tableName} $tableAlias";
   }
 
-  String? get sqlTableReference => tableAlias ?? entity!.tableName;
+  String? get sqlTableReference => tableAlias ?? entity.tableName;
 
   String get sqlInnerSelect {
     var nestedJoins =

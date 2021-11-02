@@ -128,7 +128,7 @@ class PropertyBuilder {
     validators!.forEach((vb) => vb.validate(entityBuilders));
   }
 
-  void link(List<ManagedEntity?> others) {
+  void link(List<ManagedEntity> others) {
     validators!.forEach((v) => v.link(others));
     if (isRelationship) {
       var destinationEntity =

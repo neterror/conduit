@@ -155,7 +155,7 @@ void main() {
     test("Identify top-level property with subdoc", () {
       final props = context!
           .entityForType(Parent)!
-          .identifyProperties((Parent? x) => [x!.document!["k"]])!;
+          .identifyProperties((Parent? x) => [x!.document!["k"]]);
       expect(props.length, 1);
       expect(props.first.path.length, 1);
       expect(props.first.path.first!.name, "document");
@@ -165,7 +165,7 @@ void main() {
     test("Identify top-level property with subdoc", () {
       final props = context!
           .entityForType(Parent)!
-          .identifyProperties((Parent? x) => [x!.document!["k"][1]])!;
+          .identifyProperties((Parent? x) => [x!.document!["k"][1]]);
       expect(props.length, 1);
       expect(props.first.path.length, 1);
       expect(props.first.path.first!.name, "document");
@@ -175,7 +175,7 @@ void main() {
     test("Subdoc + normal property", () {
       final props = context!
           .entityForType(Parent)!
-          .identifyProperties((Parent? x) => [x!.document!["k"][1], x.field])!;
+          .identifyProperties((Parent? x) => [x!.document!["k"][1], x.field]);
       expect(props.length, 2);
 
       expect(props.first.path.length, 1);
@@ -190,13 +190,13 @@ void main() {
     test("Can select nested properties", () {
       final props = context!
           .entityForType(Child)!
-          .identifyProperties((Child? x) => [x!.parent!.field])!;
+          .identifyProperties((Child? x) => [x!.parent!.field]);
       expect(props.length, 1);
       expect(props.first.path.length, 2);
       expect(props.first.path.first!.name, "parent");
-      expect(props.first.path.first!.entity!.tableName, "_Child");
+      expect(props.first.path.first!.entity.tableName, "_Child");
       expect(props.first.path.last!.name, "field");
-      expect(props.first.path.last!.entity!.tableName, "_Parent");
+      expect(props.first.path.last!.entity.tableName, "_Parent");
     });
   });
 }
