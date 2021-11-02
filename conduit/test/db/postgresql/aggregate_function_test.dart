@@ -52,19 +52,28 @@ void main() {
       test("produces average for int type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.average((t) => t.i);
-        expect(result, objects.fold<int>(0, (p, n) => p + n.i!) / objects.length);
+        expect(
+            result, objects.fold<int>(0, (p, n) => p + n.i!) / objects.length);
       });
 
       test("produces average for double type", () async {
         var q = Query<Test>(ctx);
         var result = await q.reduce.average((t) => t.d);
-        expect(result, objects.fold<double>(0, (p, n) => p + n.d!) / objects.length);
+        expect(result,
+            objects.fold<double>(0, (p, n) => p + n.d!) / objects.length);
       });
 
       test("with predicate", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(5);
         var result = await q.reduce.average((t) => t.i);
-        expect(result, objects.sublist(0, 5).fold<int>(0, (p, n) => p + n.i!) / 5);
+        expect(
+            result, objects.sublist(0, 5).fold<int>(0, (p, n) => p + n.i!) / 5);
+      });
+
+      test("with no values", () async {
+        var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
+        var result = await q.reduce.average((t) => t.i);
+        expect(result, 0);
       });
     });
 
@@ -79,6 +88,12 @@ void main() {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(5);
         var result = await q.reduce.count();
         expect(result, 5);
+      });
+
+      test("with no values", () async {
+        var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
+        var result = await q.reduce.count();
+        expect(result, 0);
       });
     });
 
@@ -112,6 +127,12 @@ void main() {
         var result = await q.reduce.maximum((t) => t.i);
         expect(result, objects[4].i);
       });
+
+      test("with no values", () async {
+        var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
+        var result = await q.reduce.maximum((t) => t.i);
+        expect(result, 0);
+      });
     });
 
     group("Minimum", () {
@@ -144,6 +165,12 @@ void main() {
         var result = await q.reduce.minimum((t) => t.i);
         expect(result, objects[5].i);
       });
+
+      test("with no values", () async {
+        var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
+        var result = await q.reduce.minimum((t) => t.i);
+        expect(result, 0);
+      });
     });
 
     group("Sum", () {
@@ -163,6 +190,12 @@ void main() {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(5);
         var result = await q.reduce.sum((t) => t.i);
         expect(result, objects.sublist(0, 5).fold<int>(0, (p, a) => p + a.i!));
+      });
+
+      test("with no values", () async {
+        var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
+        var result = await q.reduce.sum((t) => t.i);
+        expect(result, 0);
       });
     });
   });
