@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import '../managed/object.dart';
 import '../managed/property_description.dart';
 import '../query/query.dart';
@@ -8,7 +7,6 @@ import 'builders/column.dart';
 import 'postgresql_persistent_store.dart';
 import 'postgresql_query.dart';
 import 'query_builder.dart';
-
 
 // ignore_for_file: constant_identifier_names
 enum _Reducer {
@@ -27,8 +25,8 @@ class PostgresQueryReduce<T extends ManagedObject>
   final PostgresQueryBuilder builder;
 
   @override
-  Future<double> average(num? selector(T object)) {
-    return _execute<double>(
+  Future<double?> average(num? selector(T object)) {
+    return _execute<double?>(
         _Reducer.AVG, query.entity.identifyAttribute(selector));
   }
 
@@ -38,18 +36,18 @@ class PostgresQueryReduce<T extends ManagedObject>
   }
 
   @override
-  Future<U> maximum<U>(U? selector(T object)) {
-    return _execute<U>(_Reducer.MAX, query.entity.identifyAttribute(selector));
+  Future<U?> maximum<U>(U? selector(T object)) {
+    return _execute<U?>(_Reducer.MAX, query.entity.identifyAttribute(selector));
   }
 
   @override
-  Future<U> minimum<U>(U? selector(T object)) {
-    return _execute<U>(_Reducer.MIN, query.entity.identifyAttribute(selector));
+  Future<U?> minimum<U>(U? selector(T object)) {
+    return _execute<U?>(_Reducer.MIN, query.entity.identifyAttribute(selector));
   }
 
   @override
-  Future<U> sum<U extends num>(U? selector(T object)) {
-    return _execute<U>(_Reducer.SUM, query.entity.identifyAttribute(selector));
+  Future<U?> sum<U extends num>(U? selector(T object)) {
+    return _execute<U?>(_Reducer.SUM, query.entity.identifyAttribute(selector));
   }
 
   String _columnName(ManagedAttributeDescription? property) {

@@ -73,7 +73,7 @@ void main() {
       test("with no values", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
         var result = await q.reduce.average((t) => t.i);
-        expect(result, 0);
+        expect(result, null);
       });
     });
 
@@ -131,7 +131,7 @@ void main() {
       test("with no values", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
         var result = await q.reduce.maximum((t) => t.i);
-        expect(result, 0);
+        expect(result, null);
       });
     });
 
@@ -169,7 +169,7 @@ void main() {
       test("with no values", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
         var result = await q.reduce.minimum((t) => t.i);
-        expect(result, 0);
+        expect(result, null);
       });
     });
 
@@ -195,7 +195,7 @@ void main() {
       test("with no values", () async {
         var q = Query<Test>(ctx)..where((p) => p.id).lessThanEqualTo(-1);
         var result = await q.reduce.sum((t) => t.i);
-        expect(result, 0);
+        expect(result, null);
       });
     });
   });
