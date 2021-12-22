@@ -136,7 +136,7 @@ abstract class ResourceController extends Controller
   }
 
   @override
-  FutureOr<RequestOrResponse> handle(Request request) async {
+  FutureOr<RequestOrResponse?> handle(Request request) async {
     this.request = request;
 
     var preprocessedResult = await willProcessRequest(request);
@@ -242,7 +242,7 @@ abstract class ResourceController extends Controller
         .toList();
   }
 
-  Future<Response> _process() async {
+  Future<Response?> _process() async {
     if (!request!.body.isEmpty) {
       if (!_requestContentTypeIsSupported(request)) {
         return Response(HttpStatus.unsupportedMediaType, null, null);
@@ -361,9 +361,11 @@ abstract class ResourceController extends Controller
 
     /* bind and invoke */
     _runtime!.applyRequestProperties(this, args);
-    final response = await operation.invoker(this, args)!;
-    if (!response.hasExplicitlySetContentType) {
-      response.contentType = responseContentType;
+    final response = await operation.invoker(this, args);
+    if (response != null) {
+      if (!response.hasExplicitlySetContentType) {
+        response.contentType = responseContentType;
+      }
     }
 
     return response;
